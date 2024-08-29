@@ -76,17 +76,21 @@ function checkWin(el) {
     const mark = el.classList[el.classList.length - 1];
     const row = parseInt(el.dataset.row);
     const col = parseInt(el.dataset.col);
+    let checked = [];
 
     function checkDirection(rowDelta, colDelta) {
         let count = 0;
+        
         for (let i = -4; i <= 4; i++) {
             const r = row + i * rowDelta;
             const c = col + i * colDelta;
             const cell = document.querySelector(`[data-row='${r}'][data-col='${c}']`);
             if (cell && cell.classList.contains(mark)) {
+                checked.push(cell);
                 count++;
-                if (count === 5) return true;
+                if (count === 5) return checked;
             } else {
+                checked = [];
                 count = 0;
             }
         }
@@ -99,11 +103,27 @@ function checkWin(el) {
         checkDirection(1, 1) ||
         checkDirection(1, -1)
     ) {
-        showWin();
+        showWin(checked);
     }
 }
-function showWin() {
-    showWinner();
+function showWin(list) {
+    let timeout = 0;
+    list.forEach(element => {
+        if (turn == 1) {
+            setTimeout(() => {
+                element.style.boxShadow = `0 0 0 20px inset rgb(255, 174, 168)`;
+            }, timeout);
+        } else {
+            setTimeout(() => {
+                element.style.boxShadow = `0 0 0 20px inset rgb(168, 210, 255)`;
+            }, timeout);
+        }
+        timeout += 200;
+    });
+    console.log(list);
+    setTimeout(() => {
+        showWinner();
+    }, timeout + 1000);
     document.querySelectorAll('.case').forEach((el) => {
         el.onclick = null;
         el.style.backgroundColor = '#ddd';
@@ -147,6 +167,7 @@ function continueGame() {
         el.style.cursor = 'pointer';
         el.classList.remove('x');
         el.classList.remove('o');
+        el.style.boxShadow = 'none';
     });
     turn = 1;
     color = blue;
