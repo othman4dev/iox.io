@@ -78,12 +78,45 @@ function checkWin(el) {
     const col = parseInt(el.dataset.col);
     let checked = [];
 
-    function checkDirection(rowDelta, colDelta) {
+    function checkHorizontal() {
         let count = 0;
-        
         for (let i = -4; i <= 4; i++) {
-            const r = row + i * rowDelta;
-            const c = col + i * colDelta;
+            const c = col + i;
+            const cell = document.querySelector(`[data-row='${row}'][data-col='${c}']`);
+            if (cell && cell.classList.contains(mark)) {
+                checked.push(cell);
+                count++;
+                if (count === 5) return checked;
+            } else {
+                checked = [];
+                count = 0;
+            }
+        }
+        return false;
+    }
+
+    function checkVertical() {
+        let count = 0;
+        for (let i = -4; i <= 4; i++) {
+            const r = row + i;
+            const cell = document.querySelector(`[data-row='${r}'][data-col='${col}']`);
+            if (cell && cell.classList.contains(mark)) {
+                checked.push(cell);
+                count++;
+                if (count === 5) return checked;
+            } else {
+                checked = [];
+                count = 0;
+            }
+        }
+        return false;
+    }
+
+    function checkDiagonal1() {
+        let count = 0;
+        for (let i = -4; i <= 4; i++) {
+            const r = row + i;
+            const c = col + i;
             const cell = document.querySelector(`[data-row='${r}'][data-col='${c}']`);
             if (cell && cell.classList.contains(mark)) {
                 checked.push(cell);
@@ -97,12 +130,25 @@ function checkWin(el) {
         return false;
     }
 
-    if (
-        checkDirection(0, 1) ||
-        checkDirection(1, 0) ||
-        checkDirection(1, 1) ||
-        checkDirection(1, -1)
-    ) {
+    function checkDiagonal2() {
+        let count = 0;
+        for (let i = -4; i <= 4; i++) {
+            const r = row + i;
+            const c = col - i;
+            const cell = document.querySelector(`[data-row='${r}'][data-col='${c}']`);
+            if (cell && cell.classList.contains(mark)) {
+                checked.push(cell);
+                count++;
+                if (count === 5) return checked;
+            } else {
+                checked = [];
+                count = 0;
+            }
+        }
+        return false;
+    }
+
+    if (checkHorizontal() || checkVertical() || checkDiagonal1() || checkDiagonal2()) {
         showWin(checked);
     }
 }
@@ -126,7 +172,6 @@ function showWin(list) {
     }, timeout + 1000);
     document.querySelectorAll('.case').forEach((el) => {
         el.onclick = null;
-        el.style.backgroundColor = '#ddd';
         el.style.cursor = 'default';
     });
 }
@@ -163,7 +208,8 @@ function continueGame() {
         el.onclick = function () {
             clickCase(el);
         };
-        el.style.backgroundColor = 'white';
+        
+        modifyHoverStyle('.case', `background-color: ${color};`);
         el.style.cursor = 'pointer';
         el.classList.remove('x');
         el.classList.remove('o');
