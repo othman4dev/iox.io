@@ -158,10 +158,12 @@ function showWin(list) {
         if (turn == 1) {
             setTimeout(() => {
                 element.style.boxShadow = `0 0 0 20px inset rgb(255, 174, 168)`;
+                element.style.borderColor = red;
             }, timeout);
         } else {
             setTimeout(() => {
                 element.style.boxShadow = `0 0 0 20px inset rgb(168, 210, 255)`;
+                element.style.borderColor = blue;
             }, timeout);
         }
         timeout += 200;
@@ -214,6 +216,7 @@ function continueGame() {
         el.classList.remove('x');
         el.classList.remove('o');
         el.style.boxShadow = 'none';
+        el.style.border = 'solid 1px #0000007c';
     });
     turn = 1;
     color = blue;
