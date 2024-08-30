@@ -33,7 +33,7 @@ elements.forEach((element, index) => {
 
 function clickCase(el) {
     if (document.querySelectorAll('.case').length == document.querySelectorAll('.x').length + document.querySelectorAll('.o').length) {
-        showHideProtection();
+        showHideProtection('show');
         document.getElementById('main').style.backgroundColor = 'rgb(24, 111, 203)';
         document.getElementById('winner').style.display = 'flex';
         document.getElementById('winner-message').innerText = 'Draw';
@@ -181,7 +181,7 @@ function startGame() {
     showTurn();
 }
 function showWinner() {
-    showHideProtection();
+    showHideProtection('show');
     if (turn == 2) {
         player1++;
         console.log('Player 1 wins');
@@ -200,7 +200,7 @@ function showWinner() {
 }
 
 function continueGame() {
-    showHideProtection();
+    showHideProtection('hide');
     document.getElementById('winner').style.display = 'none';
     document.getElementById('main').style.backgroundColor = color;
     document.querySelectorAll('.case').forEach((el) => {
@@ -221,7 +221,7 @@ function continueGame() {
 }
 
 function clearCounter() {
-    showHideProtection();
+    showHideProtection('hide');
     player1 = 0;
     player2 = 0;
     setScore();
@@ -236,14 +236,10 @@ function modifyHoverStyle(selector, newStyle) {
     document.head.appendChild(style);
 }
 
-let protection = false;
-
-function showHideProtection() {
-    if (protection) {
+function showHideProtection(choice) {
+    if (choice == 'hide') {
         document.getElementById('protection').style.display = 'none';
-        protection = false;
     } else {
         document.getElementById('protection').style.display = 'flex';
-        protection = true;
     }
 }
